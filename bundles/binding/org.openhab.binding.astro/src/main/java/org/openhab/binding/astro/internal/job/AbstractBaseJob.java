@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.astro.internal.job;
 
@@ -19,35 +23,35 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Baseclass for all jobs with common methods.
- * 
+ *
  * @author Gerhard Riegler
  * @since 1.5.0
  */
 public abstract class AbstractBaseJob implements Job {
-	private static final Logger logger = LoggerFactory.getLogger(AbstractBaseJob.class);
-	protected AstroContext context = AstroContext.getInstance();
-	protected PlanetPublisher planetPublisher = PlanetPublisher.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(AbstractBaseJob.class);
+    protected AstroContext context = AstroContext.getInstance();
+    protected PlanetPublisher planetPublisher = PlanetPublisher.getInstance();
 
-	@Override
-	public void execute(JobExecutionContext jobContext) throws JobExecutionException {
-		JobDataMap jobDataMap = jobContext.getJobDetail().getJobDataMap();
+    @Override
+    public void execute(JobExecutionContext jobContext) throws JobExecutionException {
+        JobDataMap jobDataMap = jobContext.getJobDetail().getJobDataMap();
 
-		if (logger.isDebugEnabled()) {
-			String itemName = jobDataMap.getString("itemName");
-			if (itemName != null) {
-				logger.debug("Starting Astro {} for item {}", this.getClass().getSimpleName(), itemName);
-			} else {
-				logger.debug("Starting Astro {}", this.getClass().getSimpleName());
+        if (logger.isDebugEnabled()) {
+            String itemName = jobDataMap.getString("itemName");
+            if (itemName != null) {
+                logger.debug("Starting Astro {} for item {}", this.getClass().getSimpleName(), itemName);
+            } else {
+                logger.debug("Starting Astro {}", this.getClass().getSimpleName());
 
-			}
-		}
+            }
+        }
 
-		executeJob(jobDataMap);
-	}
+        executeJob(jobDataMap);
+    }
 
-	/**
-	 * Method to override by the different jobs to be executed.
-	 */
-	protected abstract void executeJob(JobDataMap jobDataMap);
+    /**
+     * Method to override by the different jobs to be executed.
+     */
+    protected abstract void executeJob(JobDataMap jobDataMap);
 
 }

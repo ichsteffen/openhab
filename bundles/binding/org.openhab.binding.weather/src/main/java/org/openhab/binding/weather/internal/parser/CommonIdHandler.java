@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.weather.internal.parser;
 
@@ -30,89 +34,89 @@ import org.slf4j.LoggerFactory;
 /**
  * Handles all the weather ids and icons of the differnet providers and map them
  * to a common weather id.
- * 
+ *
  * @author Gerhard Riegler
  * @since 1.6.0
  */
 public class CommonIdHandler {
-	private static final Logger logger = LoggerFactory.getLogger(CommonIdHandler.class);
-	private static CommonIdHandler instance;
+    private static final Logger logger = LoggerFactory.getLogger(CommonIdHandler.class);
+    private static CommonIdHandler instance;
 
-	private Map<ProviderName, Map<String, CommonId>> providerCommonIds = new HashMap<ProviderName, Map<String, CommonId>>();
+    private Map<ProviderName, Map<String, CommonId>> providerCommonIds = new HashMap<ProviderName, Map<String, CommonId>>();
 
-	private CommonIdHandler() {
-	}
+    private CommonIdHandler() {
+    }
 
-	/**
-	 * Returns the singleton instance of the CommonIdHandler.
-	 */
-	public static CommonIdHandler getInstance() {
-		if (instance == null) {
-			instance = new CommonIdHandler();
-		}
-		return instance;
-	}
+    /**
+     * Returns the singleton instance of the CommonIdHandler.
+     */
+    public static CommonIdHandler getInstance() {
+        if (instance == null) {
+            instance = new CommonIdHandler();
+        }
+        return instance;
+    }
 
-	/**
-	 * Load predefined common id mappings from an XML file.
-	 */
-	public void loadMapping() throws Exception {
-		Unmarshaller um = JAXBContext.newInstance(CommonIdList.class).createUnmarshaller();
-		InputStream stream = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream("weather/common-id-mappings.xml");
-		CommonIdList mappings = (CommonIdList) um.unmarshal(stream);
+    /**
+     * Load predefined common id mappings from an XML file.
+     */
+    public void loadMapping() throws Exception {
+        Unmarshaller um = JAXBContext.newInstance(CommonIdList.class).createUnmarshaller();
+        InputStream stream = Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream("weather/common-id-mappings.xml");
+        CommonIdList mappings = (CommonIdList) um.unmarshal(stream);
 
-		for (CommonId commonId : mappings.getCommonIds()) {
-			for (CommonIdProvider commonIdProvider : commonId.getProviders()) {
-				Map<String, CommonId> commonIds = providerCommonIds.get(commonIdProvider.getName());
-				if (commonIds == null) {
-					commonIds = new HashMap<String, CommonId>();
-					providerCommonIds.put(commonIdProvider.getName(), commonIds);
-				}
+        for (CommonId commonId : mappings.getCommonIds()) {
+            for (CommonIdProvider commonIdProvider : commonId.getProviders()) {
+                Map<String, CommonId> commonIds = providerCommonIds.get(commonIdProvider.getName());
+                if (commonIds == null) {
+                    commonIds = new HashMap<String, CommonId>();
+                    providerCommonIds.put(commonIdProvider.getName(), commonIds);
+                }
 
-				addCommonId(commonIdProvider.getIds(), "id", commonIdProvider, commonIds, commonId);
-				addCommonId(commonIdProvider.getIcons(), "icon", commonIdProvider, commonIds, commonId);
-			}
-		}
-	}
+                addCommonId(commonIdProvider.getIds(), "id", commonIdProvider, commonIds, commonId);
+                addCommonId(commonIdProvider.getIcons(), "icon", commonIdProvider, commonIds, commonId);
+            }
+        }
+    }
 
-	private void addCommonId(String[] keys, String keyType, CommonIdProvider providerMapping,
-			Map<String, CommonId> commonIds, CommonId commonCondition) {
-		if (keys != null) {
-			for (String key : keys) {
-				key = StringUtils.trim(key);
-				if (commonIds.containsKey(key)) {
-					throw new IllegalArgumentException("CommonId for provider " + providerMapping.getName() + " with "
-							+ keyType + " " + key + " already exists");
-				}
-				commonIds.put(key, commonCondition);
-			}
-		}
-	}
+    private void addCommonId(String[] keys, String keyType, CommonIdProvider providerMapping,
+            Map<String, CommonId> commonIds, CommonId commonCondition) {
+        if (keys != null) {
+            for (String key : keys) {
+                key = StringUtils.trim(key);
+                if (commonIds.containsKey(key)) {
+                    throw new IllegalArgumentException("CommonId for provider " + providerMapping.getName() + " with "
+                            + keyType + " " + key + " already exists");
+                }
+                commonIds.put(key, commonCondition);
+            }
+        }
+    }
 
-	/**
-	 * Sets the common condition id into the weather object.
-	 */
-	public void setCommonId(Weather weather) {
-		Map<String, CommonId> commonIds = providerCommonIds.get(weather.getProvider());
-		if (commonIds == null) {
-			throw new RuntimeException("No common ids for provider " + weather.getProvider() + " declared");
-		}
+    /**
+     * Sets the common condition id into the weather object.
+     */
+    public void setCommonId(Weather weather) {
+        Map<String, CommonId> commonIds = providerCommonIds.get(weather.getProvider());
+        if (commonIds == null) {
+            throw new RuntimeException("No common ids for provider " + weather.getProvider() + " declared");
+        }
 
-		Condition cond = weather.getCondition();
+        Condition cond = weather.getCondition();
 
-		CommonId cid = commonIds.get(cond.getId());
-		if (cid == null) {
-			cid = commonIds.get(cond.getIcon());
-		}
+        CommonId cid = commonIds.get(cond.getId());
+        if (cid == null) {
+            cid = commonIds.get(cond.getIcon());
+        }
 
-		if (cid != null) {
-			cond.setCommonId(cid.getId());
-		} else {
-			ToStringBuilder tsb = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-					.append("provider", weather.getProvider()).append("id", cond.getId())
-					.append("icon", cond.getIcon());
-			logger.warn("CommonId not found: {}", tsb.toString());
-		}
-	}
+        if (cid != null) {
+            cond.setCommonId(cid.getId());
+        } else {
+            ToStringBuilder tsb = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                    .append("provider", weather.getProvider()).append("id", cond.getId())
+                    .append("icon", cond.getIcon());
+            logger.warn("CommonId not found: {}", tsb.toString());
+        }
+    }
 }

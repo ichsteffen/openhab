@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.enocean.internal.profiles;
 
@@ -23,10 +27,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Bridge class to transform normal button behavior to a RollerShutter
  * "profile". A RockerSwitch can control with this profile a roller shutter.
- * 
+ *
  * @author Thomas Letsch (contact@thomas-letsch.de)
  * @since 1.3.0
- * 
+ *
  */
 public class RollershutterProfile extends BasicProfile {
 
@@ -56,53 +60,53 @@ public class RollershutterProfile extends BasicProfile {
         Command command = null;
         if (Parameter.O.name().equals(parameterAddress.getParameterId())) {
             switch (buttonState) {
-            case PRESSED:
-                if (belongsToLastShortButtonPress()) {
-                    command = StopMoveType.STOP;
-                    lastButtonShortPressTime = 0;
-                    belongsToLastShortButtonPress = true;
-                    buttonOPressedTime = System.currentTimeMillis();
-                } else {
-                    command = UpDownType.UP;
-                    buttonOPressedTime = System.currentTimeMillis();
-                }
-                break;
-            case RELEASED:
-                if (isLongOButtonReleased()) {
-                    command = StopMoveType.STOP;
-                    buttonOPressedTime = 0;
-                } else if (belongsToLastShortButtonPress) {
-                    lastButtonShortPressTime = 0;
-                    belongsToLastShortButtonPress = false;
-                } else {
-                    lastButtonShortPressTime = System.currentTimeMillis();
-                }
-                break;
+                case PRESSED:
+                    if (belongsToLastShortButtonPress()) {
+                        command = StopMoveType.STOP;
+                        lastButtonShortPressTime = 0;
+                        belongsToLastShortButtonPress = true;
+                        buttonOPressedTime = System.currentTimeMillis();
+                    } else {
+                        command = UpDownType.UP;
+                        buttonOPressedTime = System.currentTimeMillis();
+                    }
+                    break;
+                case RELEASED:
+                    if (isLongOButtonReleased()) {
+                        command = StopMoveType.STOP;
+                        buttonOPressedTime = 0;
+                    } else if (belongsToLastShortButtonPress) {
+                        lastButtonShortPressTime = 0;
+                        belongsToLastShortButtonPress = false;
+                    } else {
+                        lastButtonShortPressTime = System.currentTimeMillis();
+                    }
+                    break;
             }
         } else if (Parameter.I.name().equals(parameterAddress.getParameterId())) {
             switch (buttonState) {
-            case PRESSED:
-                if (belongsToLastShortButtonPress()) {
-                    command = StopMoveType.STOP;
-                    lastButtonShortPressTime = 0;
-                    belongsToLastShortButtonPress = true;
-                    buttonIPressedTime = System.currentTimeMillis();
-                } else {
-                    command = UpDownType.DOWN;
-                    buttonIPressedTime = System.currentTimeMillis();
-                }
-                break;
-            case RELEASED:
-                if (isLongIButtonReleased()) {
-                    command = StopMoveType.STOP;
-                    buttonIPressedTime = 0;
-                } else if (belongsToLastShortButtonPress) {
-                    lastButtonShortPressTime = 0;
-                    belongsToLastShortButtonPress = false;
-                } else {
-                    lastButtonShortPressTime = System.currentTimeMillis();
-                }
-                break;
+                case PRESSED:
+                    if (belongsToLastShortButtonPress()) {
+                        command = StopMoveType.STOP;
+                        lastButtonShortPressTime = 0;
+                        belongsToLastShortButtonPress = true;
+                        buttonIPressedTime = System.currentTimeMillis();
+                    } else {
+                        command = UpDownType.DOWN;
+                        buttonIPressedTime = System.currentTimeMillis();
+                    }
+                    break;
+                case RELEASED:
+                    if (isLongIButtonReleased()) {
+                        command = StopMoveType.STOP;
+                        buttonIPressedTime = 0;
+                    } else if (belongsToLastShortButtonPress) {
+                        lastButtonShortPressTime = 0;
+                        belongsToLastShortButtonPress = false;
+                    } else {
+                        lastButtonShortPressTime = System.currentTimeMillis();
+                    }
+                    break;
             }
         }
         logger.debug("Received new value {} for items {}", command, items);

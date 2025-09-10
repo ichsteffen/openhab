@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.astro.internal.bus;
 
@@ -22,67 +26,67 @@ import org.slf4j.LoggerFactory;
 /**
  * This class can parse information from the binding format and provides Astro
  * binding informations.
- * 
+ *
  * @author Gerhard Riegler
  * @since 1.5.0
  */
 public class AstroGenericBindingProvider extends AbstractGenericBindingProvider implements AstroBindingProvider {
-	private static final Logger logger = LoggerFactory.getLogger(AstroGenericBindingProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(AstroGenericBindingProvider.class);
 
-	private BindingConfigParser parser = new BindingConfigParser();
-	private Map<String, Item> items = new HashMap<String, Item>();
+    private BindingConfigParser parser = new BindingConfigParser();
+    private Map<String, Item> items = new HashMap<String, Item>();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getBindingType() {
-		return "astro";
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getBindingType() {
+        return "astro";
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void validateItemType(Item item, String bindingConfig) throws BindingConfigParseException {
-		// validation is done in processBindingConfiguration
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void validateItemType(Item item, String bindingConfig) throws BindingConfigParseException {
+        // validation is done in processBindingConfiguration
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void processBindingConfiguration(String context, Item item, String bindingConfig)
-			throws BindingConfigParseException {
-		super.processBindingConfiguration(context, item, bindingConfig);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void processBindingConfiguration(String context, Item item, String bindingConfig)
+            throws BindingConfigParseException {
+        super.processBindingConfiguration(context, item, bindingConfig);
 
-		AstroBindingConfig config = parser.parse(item, bindingConfig);
-		logger.debug("Adding item {} with {}", item.getName(), config);
-		items.put(item.getName(), item);
-		addBindingConfig(item, config);
-	}
+        AstroBindingConfig config = parser.parse(item, bindingConfig);
+        logger.debug("Adding item {} with {}", item.getName(), config);
+        items.put(item.getName(), item);
+        addBindingConfig(item, config);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AstroBindingConfig getBindingFor(String itemName) {
-		return (AstroBindingConfig) bindingConfigs.get(itemName);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AstroBindingConfig getBindingFor(String itemName) {
+        return (AstroBindingConfig) bindingConfigs.get(itemName);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Item getItem(String itemName) {
-		return items.get(itemName);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Item getItem(String itemName) {
+        return items.get(itemName);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean hasBinding(AstroBindingConfig bindingConfig) {
-		return bindingConfigs.containsValue(bindingConfig);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasBinding(AstroBindingConfig bindingConfig) {
+        return bindingConfigs.containsValue(bindingConfig);
+    }
 }

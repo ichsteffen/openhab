@@ -1,21 +1,25 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.ihc.ws.datatypes;
 
 /**
  * <p>
  * Java class for WSIntegerValue complex type.
- * 
+ *
  * <p>
  * The following schema fragment specifies the expected content contained within
  * this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="WSIntegerValue">
  *   &lt;complexContent>
@@ -29,62 +33,62 @@ package org.openhab.binding.ihc.ws.datatypes;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 
 public class WSIntegerValue extends WSResourceValue {
 
-	protected int integer;
-	protected int maximumValue;
-	protected int minimumValue;
+    protected int integer;
+    protected int maximumValue;
+    protected int minimumValue;
 
-	/**
-	 * Gets the value of the integer property.
-	 * 
-	 */
-	public int getInteger() {
-		return integer;
-	}
+    /**
+     * Gets the value of the integer property.
+     * 
+     */
+    public int getInteger() {
+        return integer;
+    }
 
-	/**
-	 * Sets the value of the integer property.
-	 * 
-	 */
-	public void setInteger(int value) {
-		this.integer = value;
-	}
+    /**
+     * Sets the value of the integer property.
+     * 
+     */
+    public void setInteger(int value) {
+        this.integer = value;
+    }
 
-	/**
-	 * Gets the value of the maximumValue property.
-	 * 
-	 */
-	public int getMaximumValue() {
-		return maximumValue;
-	}
+    /**
+     * Gets the value of the maximumValue property.
+     * 
+     */
+    public int getMaximumValue() {
+        return maximumValue;
+    }
 
-	/**
-	 * Sets the value of the maximumValue property.
-	 * 
-	 */
-	public void setMaximumValue(int value) {
-		this.maximumValue = value;
-	}
+    /**
+     * Sets the value of the maximumValue property.
+     * 
+     */
+    public void setMaximumValue(int value) {
+        this.maximumValue = value;
+    }
 
-	/**
-	 * Gets the value of the minimumValue property.
-	 * 
-	 */
-	public int getMinimumValue() {
-		return minimumValue;
-	}
+    /**
+     * Gets the value of the minimumValue property.
+     * 
+     */
+    public int getMinimumValue() {
+        return minimumValue;
+    }
 
-	/**
-	 * Sets the value of the minimumValue property.
-	 * 
-	 */
-	public void setMinimumValue(int value) {
-		this.minimumValue = value;
-	}
+    /**
+     * Sets the value of the minimumValue property.
+     * 
+     */
+    public void setMinimumValue(int value) {
+        this.minimumValue = value;
+    }
 
 }

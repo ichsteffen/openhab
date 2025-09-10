@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.digitalstrom.internal.client.entity.impl;
 
@@ -18,48 +22,48 @@ import org.openhab.binding.digitalstrom.internal.client.entity.EventItem;
 import org.openhab.binding.digitalstrom.internal.client.events.EventPropertyEnum;
 
 /**
- * @author 	Alexander Betker
+ * @author Alexander Betker
  * @since 1.3.0
  */
 public class JSONEventItemImpl implements EventItem {
-	
-	private String	name = null;
-	
-	private Map<EventPropertyEnum, String> properties = new HashMap<EventPropertyEnum, String>();
-	
-	public JSONEventItemImpl(JSONObject object) {
-		
-		name = object.get(JSONApiResponseKeysEnum.EVENT_NAME.getKey()).toString();
-		
-		if (object.get(JSONApiResponseKeysEnum.EVENT_PROPERTIES.getKey()) instanceof JSONObject ) {
-			
-			JSONObject  propObj = (JSONObject)object.get(JSONApiResponseKeysEnum.EVENT_PROPERTIES.getKey());
-			
-			@SuppressWarnings("unchecked")
-			Set<String> keys = propObj.keySet();
-			
-			for (String key: keys) {
-				if (EventPropertyEnum.containsId(key)) {
-					addProperty(EventPropertyEnum.getProperty(key), propObj.get(key).toString());
-				}
-			}
-			
-		}
-		
-	}
-	
-	private void addProperty(EventPropertyEnum prop, String value) {
-		properties.put(prop, value);
-	}
-	
-	@Override
-	public String getName() {
-		return name;
-	}
 
-	@Override
-	public Map<EventPropertyEnum, String> getProperties() {
-		return properties;
-	}
-	
+    private String name = null;
+
+    private Map<EventPropertyEnum, String> properties = new HashMap<EventPropertyEnum, String>();
+
+    public JSONEventItemImpl(JSONObject object) {
+
+        name = object.get(JSONApiResponseKeysEnum.EVENT_NAME.getKey()).toString();
+
+        if (object.get(JSONApiResponseKeysEnum.EVENT_PROPERTIES.getKey()) instanceof JSONObject) {
+
+            JSONObject propObj = (JSONObject) object.get(JSONApiResponseKeysEnum.EVENT_PROPERTIES.getKey());
+
+            @SuppressWarnings("unchecked")
+            Set<String> keys = propObj.keySet();
+
+            for (String key : keys) {
+                if (EventPropertyEnum.containsId(key)) {
+                    addProperty(EventPropertyEnum.getProperty(key), propObj.get(key).toString());
+                }
+            }
+
+        }
+
+    }
+
+    private void addProperty(EventPropertyEnum prop, String value) {
+        properties.put(prop, value);
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Map<EventPropertyEnum, String> getProperties() {
+        return properties;
+    }
+
 }

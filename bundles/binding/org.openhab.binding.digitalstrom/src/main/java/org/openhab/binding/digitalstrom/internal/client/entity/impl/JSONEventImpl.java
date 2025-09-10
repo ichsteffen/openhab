@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.digitalstrom.internal.client.entity.impl;
 
@@ -17,26 +21,26 @@ import org.openhab.binding.digitalstrom.internal.client.entity.Event;
 import org.openhab.binding.digitalstrom.internal.client.entity.EventItem;
 
 /**
- * @author 	Alexander Betker
+ * @author Alexander Betker
  * @since 1.3.0
  */
-public class JSONEventImpl implements Event{
-	
-	private List<EventItem>	eventItemList;
+public class JSONEventImpl implements Event {
 
-	public JSONEventImpl(JSONArray array) {
-		this.eventItemList = new LinkedList<EventItem>();
-		
-		for (int i=0; i<array.size();i++) {
-			if (array.get(i) instanceof JSONObject) {
-				this.eventItemList.add(new JSONEventItemImpl((JSONObject)array.get(i)));
-			}
-		}
-	}
+    private List<EventItem> eventItemList;
 
-	@Override
-	public List<EventItem> getEventItems() {
-		return eventItemList;
-	}
+    public JSONEventImpl(JSONArray array) {
+        this.eventItemList = new LinkedList<EventItem>();
+
+        for (int i = 0; i < array.size(); i++) {
+            if (array.get(i) instanceof JSONObject) {
+                this.eventItemList.add(new JSONEventItemImpl((JSONObject) array.get(i)));
+            }
+        }
+    }
+
+    @Override
+    public List<EventItem> getEventItems() {
+        return eventItemList;
+    }
 
 }

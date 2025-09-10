@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.homematic.internal.model;
 
@@ -20,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Object that represents a Homematic channel.
- * 
+ *
  * @author Gerhard Riegler
  * @since 1.5.0
  */
@@ -28,56 +32,56 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class HmChannel {
 
-	@XmlAttribute(name = "number", required = true)
-	private String number;
+    @XmlAttribute(name = "number", required = true)
+    private String number;
 
-	@XmlTransient
-	private HmDevice device;
+    @XmlTransient
+    private HmDevice device;
 
-	@XmlElement(name = "datapoint")
-	private List<HmDatapoint> datapoints = new ArrayList<HmDatapoint>();
+    @XmlElement(name = "datapoint")
+    private List<HmDatapoint> datapoints = new ArrayList<HmDatapoint>();
 
-	/**
-	 * Returns the channel number.
-	 */
-	public String getNumber() {
-		return number;
-	}
+    /**
+     * Returns the channel number.
+     */
+    public String getNumber() {
+        return number;
+    }
 
-	/**
-	 * Returns the device of the channel.
-	 */
-	public HmDevice getDevice() {
-		return device;
-	}
+    /**
+     * Returns the device of the channel.
+     */
+    public HmDevice getDevice() {
+        return device;
+    }
 
-	/**
-	 * Sets the device of the channel.
-	 */
-	protected void setDevice(HmDevice device) {
-		this.device = device;
-	}
+    /**
+     * Sets the device of the channel.
+     */
+    protected void setDevice(HmDevice device) {
+        this.device = device;
+    }
 
-	/**
-	 * Returns all datapoints of the channel.
-	 */
-	public List<HmDatapoint> getDatapoints() {
-		return datapoints;
-	}
+    /**
+     * Returns all datapoints of the channel.
+     */
+    public List<HmDatapoint> getDatapoints() {
+        return datapoints;
+    }
 
-	/**
-	 * Adds a datapoint to the channel.
-	 */
-	public void addDatapoint(HmDatapoint datapoint) {
-		datapoint.setChannel(this);
-		datapoints.add(datapoint);
-	}
+    /**
+     * Adds a datapoint to the channel.
+     */
+    public void addDatapoint(HmDatapoint datapoint) {
+        datapoint.setChannel(this);
+        datapoints.add(datapoint);
+    }
 
-	/**
-	 * Returns channel address.
-	 */
-	public String getAddress() {
-		return device.getAddress() + ":" + number;
-	}
+    /**
+     * Returns channel address.
+     */
+    public String getAddress() {
+        return device.getAddress() + ":" + number;
+    }
 
 }

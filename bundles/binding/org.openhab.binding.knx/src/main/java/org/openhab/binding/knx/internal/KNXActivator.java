@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.knx.internal;
 
@@ -21,24 +25,26 @@ import tuwien.auto.calimero.log.LogManager;
  */
 public final class KNXActivator implements BundleActivator {
 
-	private static Logger logger = LoggerFactory.getLogger(KNXActivator.class);
-	private final LogAdapter logAdapter = new LogAdapter();
+    private static Logger logger = LoggerFactory.getLogger(KNXActivator.class);
+    private final LogAdapter logAdapter = new LogAdapter();
 
-	/**
-	 * Called whenever the OSGi framework starts our bundle
-	 */
-	public void start(BundleContext bc) throws Exception {
-		logger.debug("KNX binding has been started.");
-		// Set global (null) logger for calimero.
-		LogManager.getManager().addWriter(null, logAdapter);
-	}
+    /**
+     * Called whenever the OSGi framework starts our bundle
+     */
+    @Override
+    public void start(BundleContext bc) throws Exception {
+        logger.debug("KNX binding has been started.");
+        // Set global (null) logger for calimero.
+        LogManager.getManager().addWriter(null, logAdapter);
+    }
 
-	/**
-	 * Called whenever the OSGi framework stops our bundle
-	 */
-	public void stop(BundleContext bc) throws Exception {
-		// Remove global (null) logger for calimero.
-		LogManager.getManager().removeWriter(null, logAdapter);
-		logger.debug("KNX binding has been stopped.");
-	}
+    /**
+     * Called whenever the OSGi framework stops our bundle
+     */
+    @Override
+    public void stop(BundleContext bc) throws Exception {
+        // Remove global (null) logger for calimero.
+        LogManager.getManager().removeWriter(null, logAdapter);
+        logger.debug("KNX binding has been stopped.");
+    }
 }

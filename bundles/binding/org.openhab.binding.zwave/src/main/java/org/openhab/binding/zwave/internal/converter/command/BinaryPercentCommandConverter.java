@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.zwave.internal.converter.command;
 
@@ -13,19 +17,20 @@ import org.openhab.core.library.types.PercentType;
 
 /**
  * Converts from {@link PercentType} command to a Z-Wave value.
+ *
  * @author Jan-Willem Spuij
  * @since 1.4.0
  */
-public class BinaryPercentCommandConverter extends
-		ZWaveCommandConverter<PercentType, Integer> {
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected Integer convert(Item item, PercentType command) {
-		if (command.intValue() <= 0)
-			return 0x00;
-		else 
-			return 0xFF;
-	}
+public class BinaryPercentCommandConverter extends ZWaveCommandConverter<PercentType, Integer> {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Integer convert(Item item, PercentType command) {
+        if (command.intValue() <= 0) {
+            return 0x00;
+        } else {
+            return 0xFF;
+        }
+    }
 }

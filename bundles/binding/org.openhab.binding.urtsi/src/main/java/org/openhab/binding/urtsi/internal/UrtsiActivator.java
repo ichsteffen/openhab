@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.urtsi.internal;
 
@@ -13,33 +17,30 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Extension of the default OSGi bundle activator
- * 
+ *
  * @author Oliver Libutzki
  * @since 1.3.0
  */
 public final class UrtsiActivator implements BundleActivator {
 
-	private static Logger logger = LoggerFactory.getLogger(UrtsiActivator.class); 
-	
-	/**
-	 * Called whenever the OSGi framework starts our bundle Urtsi
-	 */
-	public void start(BundleContext bc) throws Exception {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Somfy URTSI II binding has been started.");
-		}
-	}
+    private static Logger logger = LoggerFactory.getLogger(UrtsiActivator.class);
 
-	/**
-	 * Called whenever the OSGi framework stops our bundle
-	 */
-	public void stop(BundleContext bc) throws Exception {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Somfy URTSI II binding has been stopped.");
-		}
-	}
-	
+    /**
+     * Called whenever the OSGi framework starts our bundle Urtsi
+     */
+    @Override
+    public void start(BundleContext bc) throws Exception {
+        logger.debug("Somfy URTSI II binding has been started.");
+    }
+
+    /**
+     * Called whenever the OSGi framework stops our bundle
+     */
+    @Override
+    public void stop(BundleContext bc) throws Exception {
+        logger.debug("Somfy URTSI II binding has been stopped.");
+    }
+
 }

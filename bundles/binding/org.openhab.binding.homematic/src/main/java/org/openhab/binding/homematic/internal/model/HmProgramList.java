@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.homematic.internal.model;
 
@@ -18,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Simple class with the JAXB mapping for a list of Homematic programs.
- * 
+ *
  * @author Gerhard Riegler
  * @since 1.5.0
  */
@@ -27,14 +31,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class HmProgramList {
 
-	@XmlElement(name = "program")
-	private List<HmProgram> programs = new ArrayList<HmProgram>();
+    @XmlElement(name = "program")
+    private List<HmProgram> programs = new ArrayList<HmProgram>();
 
-	/**
-	 * Returns all programs.
-	 */
-	public List<HmProgram> getPrograms() {
-		return programs;
-	}
+    /**
+     * Returns all programs.
+     */
+    public List<HmProgram> getPrograms() {
+        return programs;
+    }
 
 }

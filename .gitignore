@@ -13,3 +13,11 @@ distribution/openhabhome/*.zip
 distribution/openhabhome/etc/rrd4j/*.rrd
 *.xml_gen
 *.xml_gen
+*.orig
+*~
+features/*/src/main/history
+itemDump.txt
+
+# IntelliJ files
+**/.idea
+**/*.iml

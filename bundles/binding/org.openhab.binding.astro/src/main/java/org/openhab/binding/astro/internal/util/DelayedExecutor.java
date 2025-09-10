@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.astro.internal.util;
 
@@ -13,34 +17,34 @@ import java.util.TimerTask;
 
 /**
  * Schedules a task for later execution with the possibility to cancel it.
- * 
+ *
  * @author Gerhard Riegler
  * @since 1.5.0
  */
 public class DelayedExecutor {
-	private Timer timer;
-	private TimerTask task;
+    private Timer timer;
+    private TimerTask task;
 
-	/**
-	 * Cancel the scheduled Task.
-	 */
-	public void cancel() {
-		if (task != null) {
-			task.cancel();
-			task = null;
-		}
-		if (timer != null) {
-			timer.cancel();
-			timer = null;
-		}
-	}
+    /**
+     * Cancel the scheduled Task.
+     */
+    public void cancel() {
+        if (task != null) {
+            task.cancel();
+            task = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
 
-	/**
-	 * Schedules a Task which starts after the specified delay.
-	 */
-	public void schedule(TimerTask task, long delay) {
-		this.task = task;
-		timer = new Timer();
-		timer.schedule(task, delay);
-	}
+    /**
+     * Schedules a Task which starts after the specified delay.
+     */
+    public void schedule(TimerTask task, long delay) {
+        this.task = task;
+        timer = new Timer();
+        timer.schedule(task, delay);
+    }
 }

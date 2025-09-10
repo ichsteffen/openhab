@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.tellstick.internal.device;
 
@@ -13,25 +17,27 @@ import org.openhab.binding.tellstick.internal.device.iface.BellDeviceIntf;
 
 /**
  * A Bell.
- * 
+ *
  * @author jarlebh
  * @since 1.5.0
  */
 public class BellDevice extends TellstickDevice implements BellDeviceIntf {
 
-	public BellDevice(int deviceId) throws SupportedMethodsException {
-		super(deviceId);
-	}
+    public BellDevice(int deviceId) throws SupportedMethodsException {
+        super(deviceId);
+    }
 
-	@Override
-	public void bell() throws TellstickException {
-		int status = JNA.CLibrary.INSTANCE.tdBell(getId());
-		if (status != TELLSTICK_SUCCESS)
-			throw new TellstickException(this, status);
-	}
+    @Override
+    public void bell() throws TellstickException {
+        int status = JNA.CLibrary.INSTANCE.tdBell(getId());
+        if (status != TELLSTICK_SUCCESS) {
+            throw new TellstickException(this, status);
+        }
+    }
 
-	public String getType() {
-		return "Bell Device";
-	}
+    @Override
+    public String getType() {
+        return "Bell Device";
+    }
 
 }

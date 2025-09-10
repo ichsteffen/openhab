@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.pilight.internal;
 
@@ -13,81 +17,61 @@ import org.openhab.core.items.Item;
 
 /**
  * openHAB binding config for a single device in pilight
- * 
+ *
  * @author Jeroen Idserda
  * @since 1.0
  */
 public class PilightBindingConfig implements BindingConfig {
-	
-		private String itemName; 
-		
-		private Class<? extends Item> itemType;
-	
-		private String instance;
-		
-		private String location;
-		
-		private String device;
-		
-		private String property; 
-		
-		private Integer scale = 1; 
-		
-		public String getItemName() {
-			return itemName;
-		}
 
-		public void setItemName(String itemName) {
-			this.itemName = itemName;
-		}
+    private String itemName;
 
-		public Class<? extends Item> getItemType() {
-			return itemType;
-		}
-		
-		public void setItemType(Class<? extends Item> itemType) {
-			this.itemType = itemType;
-		}
-		
-		public String getInstance() {
+    private Class<? extends Item> itemType;
 
-			return instance;
-		}
+    private String instance;
 
-		public void setInstance(String instance) {
-			this.instance = instance;
-		}
+    private String device;
 
-		public String getLocation() {
-			return location;
-		}
+    private String property;
 
-		public void setLocation(String location) {
-			this.location = location;
-		}
+    public String getItemName() {
+        return itemName;
+    }
 
-		public String getDevice() {
-			return device;
-		}
-		
-		public void setDevice(String device) {
-			this.device = device;
-		}
-		
-		public String getProperty() {
-			return property;
-		}
-		
-		public void setProperty(String value) {
-			this.property = value;
-		}
-		
-		public Integer getScale() {
-			return scale;
-		}
-		
-		public void setScale(Integer scale) {
-			this.scale = scale;
-		}
-		
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public Class<? extends Item> getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(Class<? extends Item> itemType) {
+        this.itemType = itemType;
+    }
+
+    public String getInstance() {
+
+        return instance;
+    }
+
+    public void setInstance(String instance) {
+        this.instance = instance;
+    }
+
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
+
+    public String getProperty() {
+        return property;
+    }
+
+    public void setProperty(String value) {
+        this.property = value;
+    }
+
 }

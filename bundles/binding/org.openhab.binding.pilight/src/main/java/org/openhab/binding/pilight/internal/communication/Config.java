@@ -1,57 +1,40 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.pilight.internal.communication;
 
-import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 /**
- * pilight configuration object 
- * 
+ * pilight configuration object
+ *
  * {@link http://www.pilight.org/development/api/#controller}
- * 
+ *
  * @author Jeroen Idserda
  * @since 1.0
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Config {
-	
-	private Map<String, Location> config;
-	
-	private List<String> version;
-	
-	private Firmware firmware;
-	
-	public Config() {
-		
-	}
 
-	public Map<String, Location> getConfig() {
-		return config;
-	}
+    private Map<String, Device> devices;
 
-	public void setConfig(Map<String, Location> config) {
-		this.config = config;
-	}
+    public Map<String, Device> getDevices() {
+        return devices;
+    }
 
-	public List<String> getVersion() {
-		return version;
-	}
+    public void setDevices(Map<String, Device> devices) {
+        this.devices = devices;
+    }
 
-	public void setVersion(List<String> version) {
-		this.version = version;
-	}
-
-	public Firmware getFirmware() {
-		return firmware;
-	}
-
-	public void setFirmware(Firmware firmware) {
-		this.firmware = firmware;
-	}
 }

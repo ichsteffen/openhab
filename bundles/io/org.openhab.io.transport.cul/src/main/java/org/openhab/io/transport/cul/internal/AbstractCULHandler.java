@@ -1,312 +1,331 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.io.transport.cul.internal;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedTransferQueue;
 
 import org.openhab.io.transport.cul.CULCommunicationException;
 import org.openhab.io.transport.cul.CULDeviceException;
-import org.openhab.io.transport.cul.CULHandler;
 import org.openhab.io.transport.cul.CULListener;
-import org.openhab.io.transport.cul.CULMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * Abstract base class for all CULHandler which brings some convenience
  * regarding registering listeners and detecting forbidden messages.
- * 
+ *
  * @author Till Klocke
  * @since 1.4.0
  */
-public abstract class AbstractCULHandler implements CULHandler, CULHandlerInternal {
+public abstract class AbstractCULHandler<T extends CULConfig> implements CULHandlerInternal<T> {
 
-	private final static Logger log = LoggerFactory.getLogger(AbstractCULHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(AbstractCULHandler.class);
 
-	/**
-	 * Thread which sends all queued commands to the CUL.
-	 * 
-	 * @author Till Klocke
-	 * @since 1.4.0
-	 * 
-	 */
-	private class SendThread extends Thread {
+    /**
+     * Thread which sends all queued commands to the CUL.
+     * The Thread waits on a CUL response before sending a new
+     * command to prevent race conditions.
+     *
+     * @author Till Klocke
+     * @since 1.4.0
+     *
+     */
+    private class SendThread extends Thread implements CULListener {
 
-		private final Logger logger = LoggerFactory.getLogger(SendThread.class);
+        private final Logger logger = LoggerFactory.getLogger(SendThread.class);
 
-		@Override
-		public void run() {
-			while (!isInterrupted()) {
-				String command = sendQueue.poll();
-				if (command != null) {
-					if (!command.endsWith("\r\n")) {
-						command = command + "\r\n";
-					}
-					try {
-						writeMessage(command);
-					} catch (CULCommunicationException e) {
-						logger.error("Error while writing command to CUL", e);
-					}
-				}
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					logger.debug("Error while sleeping in SendThread", e);
-				}
-			}
-		}
-	}
+        /**
+         * List of commands the CULfw does not response to and we shall not wait for
+         */
+        private final static String async_cmds = "F";
 
-	/**
-	 * Wrapper class wraps a CULListener and a received Strings and gets
-	 * executed by a executor in its own thread.
-	 * 
-	 * @author Till Klocke
-	 * @since 1.4.0
-	 * 
-	 */
-	private static class NotifyDataReceivedRunner implements Runnable {
+        /**
+         * Timeout in milliseconds the thread will wait for an response by the CUL
+         */
+        private final static int waitForResponse_ms = 2000;
 
-		private String message;
-		private CULListener listener;
+        @Override
+        public void run() {
+            String command = null;
 
-		public NotifyDataReceivedRunner(CULListener listener, String message) {
-			this.message = message;
-			this.listener = listener;
-		}
+            while (!isInterrupted()) {
+                try {
+                    command = sendQueue.take();
+                } catch (InterruptedException e) {
+                    logger.warn("Failed to wait for queue: " + e.toString());
+                }
+                if (command == null) {
+                    continue;
+                }
+                if (!command.endsWith("\r\n")) {
+                    command = command + "\r\n";
+                }
+                try {
+                    logger.trace("Writing message: {}", command);
 
-		@Override
-		public void run() {
-			listener.dataReceived(message);
-		}
+                    writeMessage(command);
+                    if (async_cmds.contains(command.subSequence(0, 1))) {
+                        continue;
+                    }
+                    long start_ms = System.nanoTime();
+                    waitOnCulResponse();
+                    logger.trace("Response took {} ms", (System.nanoTime() - start_ms) / 1000000);
+                } catch (CULCommunicationException e) {
+                    logger.warn("Error while writing command to CUL", e);
+                }
+            }
+            logger.warn("Sending thread interrupted");
+        }
 
-	}
+        private synchronized void waitOnCulResponse() {
+            try {
+                wait(waitForResponse_ms);
+            } catch (InterruptedException e) {
+                logger.debug("Error while sleeping in SendThread", e);
+            }
+        }
 
-	/**
-	 * Executor to handle received messages. Every listern should be called in
-	 * its own thread.
-	 */
-	protected Executor receiveExecutor = Executors.newCachedThreadPool();
-	protected SendThread sendThread = new SendThread();
+        @Override
+        public synchronized void dataReceived(String data) {
+            logger.trace("CUL response received: {}", data);
+            notify();
+        }
 
-	protected String deviceName;
-	protected CULMode mode;
+        @Override
+        public synchronized void error(Exception e) {
+            logger.debug("CUL error received: {}", e);
+            notify();
+        }
+    }
 
-	protected List<CULListener> listeners = new ArrayList<CULListener>();
+    /**
+     * Wrapper class wraps a CULListener and a received Strings and gets
+     * executed by a executor in its own thread.
+     *
+     * @author Till Klocke
+     * @since 1.4.0
+     *
+     */
+    private static class NotifyDataReceivedRunner implements Runnable {
 
-	protected Queue<String> sendQueue = new ConcurrentLinkedQueue<String>();
-	protected int credit10ms = 0;
-	protected BufferedReader br;
-	protected BufferedWriter bw;
+        private String message;
+        private CULListener listener;
 
-	protected AbstractCULHandler(String deviceName, CULMode mode) {
-		this.mode = mode;
-		this.deviceName = deviceName;
-	}
+        public NotifyDataReceivedRunner(CULListener listener, String message) {
+            this.message = message;
+            this.listener = listener;
+        }
 
-	@Override
-	public CULMode getCULMode() {
-		return mode;
-	}
+        @Override
+        public void run() {
+            listener.dataReceived(message);
+        }
 
-	@Override
-	public void registerListener(CULListener listener) {
-		if (listener != null) {
-			listeners.add(listener);
-		}
-	}
+    }
 
-	@Override
-	public void unregisterListener(CULListener listener) {
-		if (listener != null) {
-			listeners.remove(listener);
-		}
-	}
+    /**
+     * Executor to handle received messages. Every listern should be called in
+     * its own thread.
+     */
+    protected Executor receiveExecutor = Executors.newCachedThreadPool();
+    protected SendThread sendThread = new SendThread();
 
-	@Override
-	public boolean hasListeners() {
-		return listeners.size() > 0;
-	}
+    protected T config;
 
-	@Override
-	public void open() throws CULDeviceException {
-		openHardware();
-		sendThread.start();
-	}
+    protected List<CULListener> listeners = new ArrayList<CULListener>();
 
-	@Override
-	public void close() {
-		sendThread.interrupt();
-		closeHardware();
-	}
+    protected BlockingQueue<String> sendQueue = new LinkedTransferQueue<String>();
+    protected int credit10ms = 0;
 
-	/**
-	 * initialize the CUL hardware and open the connection
-	 * 
-	 * @throws CULDeviceException
-	 */
-	protected abstract void openHardware() throws CULDeviceException;
+    protected AbstractCULHandler(T config) {
+        this.config = config;
+    }
 
-	/**
-	 * Close the connection to the hardware and clean up all resources.
-	 */
-	protected abstract void closeHardware();
+    @Override
+    public void registerListener(CULListener listener) {
+        if (listener != null) {
+            listeners.add(listener);
+        }
+    }
 
-	@Override
-	public void send(String command) {
-		if (isMessageAllowed(command)) {
-			sendQueue.add(command);
-		}
-	}
+    @Override
+    public void unregisterListener(CULListener listener) {
+        if (listener != null) {
+            listeners.remove(listener);
+        }
+    }
 
-	@Override
-	public void sendWithoutCheck(String message) throws CULCommunicationException {
-		sendQueue.add(message);
-	}
+    @Override
+    public boolean hasListeners() {
+        return (listeners.size() == 1 && listeners.get(0) != sendThread || listeners.size() > 1);
+    }
 
+    @Override
+    public void open() throws CULDeviceException {
+        openHardware();
 
-	/**
-	 * Checks if the message would alter the RF mode of this device.
-	 * 
-	 * @param message
-	 *            The message to check
-	 * @return true if the message doesn't alter the RF mode, false if it does.
-	 */
-	protected boolean isMessageAllowed(String message) {
-		if (message.startsWith("X") || message.startsWith("x")) {
-			return false;
-		}
-		if (message.startsWith("Ar")) {
-			return false;
-		}
-		return true;
-	}
+        registerListener(sendThread);
+        sendThread.start();
+    }
 
-	/**
-	 * Notifies each CULListener about the received data in its own thread.
-	 * 
-	 * @param data
-	 */
-	protected void notifyDataReceived(String data) {
-		for (final CULListener listener : listeners) {
-			receiveExecutor.execute(new NotifyDataReceivedRunner(listener, data));
-		}
-	}
+    @Override
+    public void close() {
+        sendThread.interrupt();
+        unregisterListener(sendThread);
 
-	protected void notifyError(Exception e) {
-		for (CULListener listener : listeners) {
-			listener.error(e);
-		}
-	}
+        closeHardware();
+    }
 
-	
-	/**
-	 * read and process next line from underlying transport.
-	 * @throws CULCommunicationException if 
-	 */
-	protected void processNextLine() throws CULCommunicationException  {
-		try {
-			String data = br.readLine();
-			if(data==null){
-				String msg="EOF encountered for "+deviceName;
-				log.error(msg);
-				throw new CULCommunicationException(msg);
-			}
-			
-			log.debug("Received raw message from CUL: " + data);
-			if ("EOB".equals(data)) {
-				log.warn("(EOB) End of Buffer. Last message lost. Try sending less messages per time slot to the CUL");
-				return;
-			} else if ("LOVF".equals(data)) {
-				log.warn("(LOVF) Limit Overflow: Last message lost. You are using more than 1% transmitting time. Reduce the number of rf messages");
-				return;
-			} else if (data.matches("^\\d+\\s+\\d+"))
-			{					
-				processCreditReport(data);
-				return;
-			}
-			notifyDataReceived(data);
-			requestCreditReport();
-						
-		} catch (IOException e) {
-			log.error("Exception while reading from CUL port "+deviceName, e);
-			notifyError(e);
-			
-			throw new CULCommunicationException(e);
-		}				
-	}
+    /**
+     * initialize the CUL hardware and open the connection
+     *
+     * @throws CULDeviceException
+     */
+    protected abstract void openHardware() throws CULDeviceException;
 
-	/**
-	 * process data received from credit report
-	 * @param data
-	 */
-	private void processCreditReport(String data) {
-		// Credit report received
-		String[] report = data.split(" ");					
-		credit10ms = Integer.parseInt(report[report.length-1]);
-		log.debug("credit10ms = "+credit10ms);
-	}
-	
+    /**
+     * Close the connection to the hardware and clean up all resources.
+     */
+    protected abstract void closeHardware();
 
-	/**
-	 * get the remaining send time on channel as seen at the last send/receive event.
-	 * 
-	 * @return  remaining send time in 10ms units
-	 */
-	public int getCredit10ms() {
-		return credit10ms;
-	}
+    protected abstract void write(String command);
 
-	/**
-	 * write out request for a credit report directly to CUL
-	 */
-	private void requestCreditReport() {
-		/* this requests a report which provides credit10ms */
-		log.debug("Requesting credit report");
-		try {
-			bw.write("X\r\n");
-			bw.flush();
-		} catch (IOException e) {
-			log.error("Can't write report command to CUL", e);
-		}
-	}
+    @Override
+    public void send(String command) {
+        if (isMessageAllowed(command)) {
+            if (sendQueue.offer(command)) {
+                requestCreditReport();
+            } else {
+                log.warn("Send buffer overrun. Doing reset");
+                sendQueue.clear();
+            }
+        }
+    }
 
-	/**
-	 * Write a message to the CUL.
-	 * 
-	 * @param message
-	 * @throws CULCommunicationException
-	 */
-	private  void writeMessage(String message) throws CULCommunicationException {
-		log.debug("Sending raw message to CUL "+deviceName+":  '"+ message+"'");
-		if (bw == null) {
-			log.error("Can't write message, BufferedWriter is NULL");
-		}
-		synchronized (bw) {
-			try {
-				bw.write(message);
-				bw.flush();
-			} catch (IOException e) {
-				log.error("Can't write to CUL "+deviceName, e);
-			}
-			
-			requestCreditReport();
-		}
-	
-	}
+    @Override
+    public void sendWithoutCheck(String message) throws CULCommunicationException {
+        sendQueue.offer(message);
+    }
+
+    /**
+     * Checks if the message would alter the RF mode of this device.
+     *
+     * @param message
+     *            The message to check
+     * @return true if the message doesn't alter the RF mode, false if it does.
+     */
+    protected boolean isMessageAllowed(String message) {
+        if (message.startsWith("X") || message.startsWith("x")) {
+            return false;
+        }
+        if (message.startsWith("Ar")) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Notifies each CULListener about the received data in its own thread.
+     *
+     * @param data
+     */
+    protected void notifyDataReceived(String data) {
+        for (final CULListener listener : listeners) {
+            receiveExecutor.execute(new NotifyDataReceivedRunner(listener, data));
+        }
+    }
+
+    protected void notifyError(Exception e) {
+        for (CULListener listener : listeners) {
+            listener.error(e);
+        }
+    }
+
+    /**
+     * read and process next line from underlying transport.
+     *
+     * @throws CULCommunicationException
+     *             if
+     */
+    protected void processNextLine(String data) {
+        log.debug("Received raw message from CUL: {}", data);
+        if ("EOB".equals(data)) {
+            log.warn("(EOB) End of Buffer. Last message lost. Try sending less messages per time slot to the CUL");
+            return;
+        } else if ("LOVF".equals(data)) {
+            log.warn(
+                    "(LOVF) Limit Overflow: Last message lost. You are using more than 1% transmitting time. Reduce the number of rf messages");
+            return;
+        } else if (data.matches("^\\d+\\s+\\d+")) {
+            processCreditReport(data);
+        }
+        notifyDataReceived(data);
+    }
+
+    /**
+     * process data received from credit report
+     *
+     * @param data
+     */
+    private void processCreditReport(String data) {
+        // Credit report received
+        String[] report = data.split(" ");
+        credit10ms = Integer.parseInt(report[report.length - 1]);
+        log.debug("credit10ms = {}", credit10ms);
+    }
+
+    /**
+     * get the remaining send time on channel as seen at the last send/receive
+     * event.
+     *
+     * @return remaining send time in 10ms units
+     */
+    @Override
+    public int getCredit10ms() {
+        return credit10ms;
+    }
+
+    /**
+     * write out request for a credit report directly to CUL
+     */
+    private void requestCreditReport() {
+        /* this requests a report which provides credit10ms */
+        log.trace("Requesting credit report");
+        try {
+            sendWithoutCheck("X\r\n");
+        } catch (CULCommunicationException e) {
+            log.warn("Error requesting credit report from CUL", e);
+        }
+    }
+
+    /**
+     * Write a message to the CUL.
+     *
+     * @param message
+     * @throws CULCommunicationException
+     */
+    private void writeMessage(String message) throws CULCommunicationException {
+        log.trace("Writing message: {}", message);
+        write(message);
+    }
+
+    @Override
+    public T getConfig() {
+        return config;
+    }
 }

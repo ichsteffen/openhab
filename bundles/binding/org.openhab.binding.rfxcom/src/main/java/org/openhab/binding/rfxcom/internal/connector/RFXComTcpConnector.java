@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.rfxcom.internal.connector;
 
@@ -15,47 +19,50 @@ import org.slf4j.LoggerFactory;
 
 /**
  * RFXCOM connector for TCP/IP communication.
- * 
+ *
  * @author Pauli Anttila, Evert van Es
  * @since 1.2.0
  */
 public class RFXComTcpConnector implements RFXComConnectorInterface {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(RFXComTcpConnector.class);
+    private static final Logger logger = LoggerFactory.getLogger(RFXComTcpConnector.class);
 
-	RFXComTcpConnector() {
-		
-	}
+    RFXComTcpConnector() {
 
-	@Override
-	public void connect(String device) throws Exception {
+    }
 
-		logger.error("connect not implemented");
-	}
+    @Override
+    public void connect(String device) throws Exception {
 
-	@Override
-	public void disconnect() {
-		logger.error("disconnect not implemented");
-	}
-	
-	
-	@Override
-	public void sendMessage(byte[] data) throws IOException {
+        logger.error("connect not implemented");
+    }
 
-		logger.error("sendPacket not implemented");
-	}
+    @Override
+    public void disconnect() {
+        logger.error("disconnect not implemented");
+    }
 
-	@Override
-	public void addEventListener(RFXComEventListener listener) {
+    @Override
+    public void sendMessage(byte[] data) throws IOException {
 
-		logger.error("addEventListener not implemented");
-	}
+        logger.error("sendPacket not implemented");
+    }
 
-	@Override
-	public void removeEventListener(RFXComEventListener listener) {
+    @Override
+    public void addEventListener(RFXComEventListener listener) {
 
-		logger.error("removeEventListener not implemented");
-	}
+        logger.error("addEventListener not implemented");
+    }
+
+    @Override
+    public void removeEventListener(RFXComEventListener listener) {
+
+        logger.error("removeEventListener not implemented");
+    }
+
+    @Override
+    public void clearReceiveBuffer() {
+        logger.error("clearReceiveBuffer not implemented");
+    }
 
 }

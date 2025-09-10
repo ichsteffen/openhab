@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.enocean.internal.profiles;
 
@@ -35,10 +39,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The default profile which maps some parameters to some states / command.
- * 
+ *
  * @author Thomas Letsch (contact@thomas-letsch.de)
  * @since 1.3.0
- * 
+ *
  */
 public class StandardProfile extends BasicProfile {
 
@@ -48,17 +52,20 @@ public class StandardProfile extends BasicProfile {
 
     public StandardProfile(Item item, EventPublisher eventPublisher) {
         super(item, eventPublisher);
-        converterFactory.addStateConverter(Parameter.TEMPERATURE.name(), DecimalType.class, TemperatureNumberWithUnitConverter.class);
+        converterFactory.addStateConverter(Parameter.TEMPERATURE.name(), DecimalType.class,
+                TemperatureNumberWithUnitConverter.class);
         converterFactory.addStateConverter(Parameter.HUMIDITY.name(), PercentType.class, HumidityConverter.class);
         converterFactory.addStateConverter(Parameter.CO2_CONCENTRATION.name(), DecimalType.class, PPMConverter.class);
         converterFactory.addStateConverter(Parameter.VOC_CONCENTRATION.name(), DecimalType.class, PPBConverter.class);
-        converterFactory.addStateConverter(Parameter.ILLUMINANCE.name(), DecimalType.class, IlluminationConverter.class);
+        converterFactory.addStateConverter(Parameter.ILLUMINANCE.name(), DecimalType.class,
+                IlluminationConverter.class);
         converterFactory.addStateConverter(Parameter.MOVEMENT.name(), OnOffType.class, OnOffStateConverter.class);
         converterFactory.addStateConverter(Parameter.SUPPLY_VOLTAGE.name(), DecimalType.class, VoltageConverter.class);
         converterFactory.addStateConverter(Parameter.POWER.name(), DecimalType.class, PowerConverter.class);
         converterFactory.addStateConverter(Parameter.I.name(), OnOffType.class, ButtonStateConverter.class);
         converterFactory.addStateConverter(Parameter.O.name(), OnOffType.class, ButtonStateConverter.class);
-        converterFactory.addStateConverter(Parameter.CONTACT_STATE.name(), OpenClosedType.class, ContactStateConverter.class);
+        converterFactory.addStateConverter(Parameter.CONTACT_STATE.name(), OpenClosedType.class,
+                ContactStateConverter.class);
     }
 
     @Override
@@ -67,7 +74,8 @@ public class StandardProfile extends BasicProfile {
             if (item == null) {
                 continue;
             }
-            StateConverter<?, ?> converter = converterFactory.getToStateConverter(parameterAddress.getParameterId(), item);
+            StateConverter<?, ?> converter = converterFactory.getToStateConverter(parameterAddress.getParameterId(),
+                    item);
             if (converter == null) {
                 logger.warn("No converter found for " + parameterAddress + " - doing nothing.");
                 return;

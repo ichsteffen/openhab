@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.rfxcom.internal.messages;
 
@@ -17,61 +21,60 @@ import org.openhab.core.types.Type;
 
 /**
  * RFXCOM data class for control message.
- * 
+ *
  * @author Pauli Anttila
  * @since 1.2.0
  */
 public class RFXComControlMessage extends RFXComBaseMessage {
 
-	public RFXComControlMessage() {
+    public RFXComControlMessage() {
 
-	}
+    }
 
-	public RFXComControlMessage(byte[] data) {
-		encodeMessage(data);
-	}
+    public RFXComControlMessage(byte[] data) {
+        encodeMessage(data);
+    }
 
-	@Override
-	public byte[] decodeMessage() {
-		return null;
-	}
+    @Override
+    public byte[] decodeMessage() {
+        return null;
+    }
 
-	@Override
-	public void encodeMessage(byte[] data) {
-		super.encodeMessage(data);
-	}
+    @Override
+    public void encodeMessage(byte[] data) {
+        super.encodeMessage(data);
+    }
 
-	@Override
-	public String toString() {
-		String str = "";
+    @Override
+    public String toString() {
+        String str = "";
 
-		str += super.toString();
+        str += super.toString();
 
-		return str;
-	}
+        return str;
+    }
 
-	@Override
-	public State convertToState(RFXComValueSelector valueSelector)
-			throws RFXComException {
-		
-		throw new RFXComException("Not supported");
-	}
+    @Override
+    public State convertToState(RFXComValueSelector valueSelector) throws RFXComException {
 
-	@Override
-	public void convertFromState(RFXComValueSelector valueSelector, String id,
-			Object subType, Type type, byte seqNumber) throws RFXComException {
-		
-		throw new RFXComException("Not supported");
-	}
+        throw new RFXComException("Not supported");
+    }
 
-	@Override
-	public Object convertSubType(String subType) throws RFXComException {
-		
-		throw new RFXComException("Not supported");
-	}
+    @Override
+    public void convertFromState(RFXComValueSelector valueSelector, String id, Object subType, Type type,
+            byte seqNumber) throws RFXComException {
 
-	@Override
-	public List<RFXComValueSelector> getSupportedValueSelectors() throws RFXComException {
-		return null;
-	}
+        throw new RFXComException("Not supported");
+    }
+
+    @Override
+    public Object convertSubType(String subType) throws RFXComException {
+
+        throw new RFXComException("Not supported");
+    }
+
+    @Override
+    public List<RFXComValueSelector> getSupportedValueSelectors() throws RFXComException {
+        return null;
+    }
 }

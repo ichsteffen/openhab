@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.plcbus.internal.protocol;
 
@@ -12,18 +16,18 @@ import org.openhab.binding.plcbus.internal.protocol.commands.StatusOn;
 
 /**
  * Response from PLCBusStatus request
- * 
+ *
  * @author Robin Lenz
  * @since 1.1.0
  */
 public class StatusResponse extends Response {
 
-	public StatusResponse(boolean acknowlagement, Command command, int firstParameter, int secondParameter) {
-		super(acknowlagement, command, firstParameter, secondParameter);
-	}
+    public StatusResponse(boolean acknowlagement, Command command, int firstParameter, int secondParameter) {
+        super(acknowlagement, command, firstParameter, secondParameter);
+    }
 
-	public boolean isUnitOn() {
-		return command instanceof StatusOn;
-	}
-	
+    public boolean isUnitOn() {
+        return command instanceof StatusOn;
+    }
+
 }

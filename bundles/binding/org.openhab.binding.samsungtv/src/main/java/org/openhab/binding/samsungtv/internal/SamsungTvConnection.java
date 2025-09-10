@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.samsungtv.internal;
 
@@ -16,48 +20,45 @@ import de.quist.samy.remocon.RemoteSession;
 
 /**
  * This class open a TCP/IP connection to the Samsung device, sends commands and wait for a response
- * 
+ *
  * @author Pauli Anttila
  * @since 1.2.0
  */
 public class SamsungTvConnection {
 
-	private static Logger logger = 
-		LoggerFactory.getLogger(SamsungTvConnection.class);
-	
-	private String ip;
-	private int port;
-	
-	
-	public SamsungTvConnection(String ip, int port) {
-		this.ip = ip;
-		this.port = port;
-	}
+    private static Logger logger = LoggerFactory.getLogger(SamsungTvConnection.class);
 
-	/**
-	 * Sends a command to Samsung device.
-	 * 
-	 * @param cmd
-	 *            Command to send
-	 */
-	public void send(final String cmd) {
-		
-		RemoteSession remoteController = null;
-		
-		try {
-			remoteController = RemoteSession.create("openHAB", "openHAB", ip, port);
-			
-			Key key = Key.valueOf(cmd);
-			logger.debug("Try to send command: {}", cmd);
-			
-			remoteController.sendKey(key);
+    private String ip;
+    private int port;
 
-		} catch (Exception e) {
-			logger.error("Could not send command to device on {}: {}", ip + ":" + port, e);
-		} 
-		
-		remoteController = null;
-	}
-	
+    public SamsungTvConnection(String ip, int port) {
+        this.ip = ip;
+        this.port = port;
+    }
+
+    /**
+     * Sends a command to Samsung device.
+     * 
+     * @param cmd
+     *            Command to send
+     */
+    public void send(final String cmd) {
+
+        RemoteSession remoteController = null;
+
+        try {
+            remoteController = RemoteSession.create("openHAB", "openHAB", ip, port);
+
+            Key key = Key.valueOf(cmd);
+            logger.debug("Try to send command: {}", cmd);
+
+            remoteController.sendKey(key);
+
+        } catch (Exception e) {
+            logger.error("Could not send command to device on {}: {}", ip + ":" + port, e);
+        }
+
+        remoteController = null;
+    }
 
 }

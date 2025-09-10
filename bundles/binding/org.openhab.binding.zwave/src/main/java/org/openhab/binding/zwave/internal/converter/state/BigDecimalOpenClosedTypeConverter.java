@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.zwave.internal.converter.state;
 
@@ -14,18 +18,18 @@ import org.openhab.core.library.types.OpenClosedType;
 
 /**
  * Converts from a Z-Wave big decimal value to a {@link OpenClosedType}
+ *
  * @author Jan-Willem Spuij
  * @since 1.4.0
  */
-public class BigDecimalOpenClosedTypeConverter extends
-		ZWaveStateConverter<BigDecimal, OpenClosedType> {
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected OpenClosedType convert(BigDecimal value) {
-		return BigDecimal.ZERO.compareTo(value) != 0 ? OpenClosedType.OPEN : OpenClosedType.CLOSED;
-	}
+public class BigDecimalOpenClosedTypeConverter extends ZWaveStateConverter<BigDecimal, OpenClosedType> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected OpenClosedType convert(BigDecimal value) {
+        return BigDecimal.ZERO.compareTo(value) != 0 ? OpenClosedType.OPEN : OpenClosedType.CLOSED;
+    }
 
 }

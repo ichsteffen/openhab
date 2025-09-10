@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.action.squeezebox.internal;
 
@@ -15,48 +19,47 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class registers an OSGi service for the Squeezebox action.
- * 
+ *
  * @author Ben Jones
  * @since 1.4.0
  */
 public class SqueezeboxActionService implements ActionService {
 
-	private static final Logger logger = 
-		LoggerFactory.getLogger(SqueezeboxActionService.class);
+    private static final Logger logger = LoggerFactory.getLogger(SqueezeboxActionService.class);
 
-	public void activate() {
-		logger.debug("Squeezebox action service activated");
-	}
+    public void activate() {
+        logger.debug("Squeezebox action service activated");
+    }
 
-	public void deactivate() {
-		logger.debug("Squeezebox action service deactivated");
-	}
-	
-	public String getActionClassName() {
-		return Squeezebox.class.getCanonicalName();
-	}
+    public void deactivate() {
+        logger.debug("Squeezebox action service deactivated");
+    }
 
-	public Class<?> getActionClass() {
-		return Squeezebox.class;
-	}
-	
-	/**
-	 * Setter for Declarative Services. Adds the SqueezeServer instance.
-	 * 
-	 * @param squeezeServer
-	 *            Service.
-	 */
-	public void setSqueezeServer(SqueezeServer squeezeServer) {
-		Squeezebox.squeezeServer = squeezeServer;
-	}
+    public String getActionClassName() {
+        return Squeezebox.class.getCanonicalName();
+    }
 
-	/**
-	 * Unsetter for Declarative Services.
-	 * 
-	 * @param squeezeServer
-	 *            Service to remove.
-	 */
-	public void unsetSqueezeServer(SqueezeServer squeezeServer) {
-		Squeezebox.squeezeServer = null;
-	}	
+    public Class<?> getActionClass() {
+        return Squeezebox.class;
+    }
+
+    /**
+     * Setter for Declarative Services. Adds the SqueezeServer instance.
+     * 
+     * @param squeezeServer
+     *            Service.
+     */
+    public void setSqueezeServer(SqueezeServer squeezeServer) {
+        Squeezebox.squeezeServer = squeezeServer;
+    }
+
+    /**
+     * Unsetter for Declarative Services.
+     * 
+     * @param squeezeServer
+     *            Service to remove.
+     */
+    public void unsetSqueezeServer(SqueezeServer squeezeServer) {
+        Squeezebox.squeezeServer = null;
+    }
 }

@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.homematic.internal.model;
 
@@ -17,7 +21,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Object that represents a Homematic variable.
- * 
+ *
  * @author Gerhard Riegler
  * @since 1.5.0
  */
@@ -26,9 +30,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class HmVariable extends HmValueItem {
 
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("name", name).toString();
-	}
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("name", name).toString();
+    }
 
 }

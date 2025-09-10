@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.astro.internal.model;
 
@@ -16,33 +20,33 @@ import org.openhab.binding.astro.internal.util.DateTimeUtils;
 
 /**
  * Extends the eclipse object with the ring-like eclipse information.
- * 
+ *
  * @author Gerhard Riegler
  * @since 1.6.0
  */
 public class SunEclipse extends Eclipse {
-	private Calendar ring;
+    private Calendar ring;
 
-	/**
-	 * Returns the date of the next ring-like eclipse.
-	 */
-	public Calendar getRing() {
-		return ring;
-	}
+    /**
+     * Returns the date of the next ring-like eclipse.
+     */
+    public Calendar getRing() {
+        return ring;
+    }
 
-	/**
-	 * Sets the date of the next ring-like eclipse.
-	 */
-	public void setRing(Calendar ring) {
-		this.ring = ring;
-	}
+    /**
+     * Sets the date of the next ring-like eclipse.
+     */
+    public void setRing(Calendar ring) {
+        this.ring = ring;
+    }
 
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-				.append("total", DateTimeUtils.getDate(getTotal()))
-				.append("partial", DateTimeUtils.getDate(getPartial())).append("ring", DateTimeUtils.getDate(ring))
-				.toString();
-	}
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("total", DateTimeUtils.getDate(getTotal()))
+                .append("partial", DateTimeUtils.getDate(getPartial())).append("ring", DateTimeUtils.getDate(ring))
+                .toString();
+    }
 
 }

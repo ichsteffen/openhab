@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.weather.internal.model;
 
@@ -21,158 +25,162 @@ import org.openhab.binding.weather.internal.annotation.ProviderMappings;
 
 /**
  * Common provider model for weather data.
- * 
+ *
  * @author Gerhard Riegler
  * @since 1.6.0
  */
 public class Weather {
-	public static final String VIRTUAL_TEMP_MINMAX = "temperature.minMax";
-	private static final String[] VIRTUAL_PROPERTIES = new String[] { VIRTUAL_TEMP_MINMAX };
+    public static final String VIRTUAL_TEMP_MINMAX = "temperature.minMax";
+    private static final String[] VIRTUAL_PROPERTIES = new String[] { VIRTUAL_TEMP_MINMAX };
+    private Atmosphere atmosphere = new Atmosphere();
+    private Clouds clouds = new Clouds();
+    private Condition condition = new Condition();
+    private Precipitation precipitation = new Precipitation();
+    private Temperature temperature = new Temperature();
+    private Wind wind = new Wind();
+    private Station station = new Station();
+    private ProviderName provider;
 
-	private Athmosphere athmosphere = new Athmosphere();
-	private Clouds clouds = new Clouds();
-	private Condition condition = new Condition();
-	private Precipitation precipitation = new Precipitation();
-	private Temperature temperature = new Temperature();
-	private Wind wind = new Wind();
+    @ProviderMappings({ @Provider(name = ProviderName.HAMWEATHER, property = "error.description"),
+            @Provider(name = ProviderName.FORECASTIO, property = "error"),
+            @Provider(name = ProviderName.OPENWEATHERMAP, property = "message"),
+            @Provider(name = ProviderName.WORLDWEATHERONLINE, property = "data.error.msg"),
+            @Provider(name = ProviderName.METEOBLUE, property = "error_message"),
+            @Provider(name = ProviderName.APIXU, property = "error.message"),
+            @Provider(name = ProviderName.WEATHERBIT, property = "error") })
+    private String error;
 
-	private ProviderName provider;
+    @ProviderMappings({ @Provider(name = ProviderName.OPENWEATHERMAP, property = "cod") })
+    private Integer responseCode;
 
-	@ProviderMappings({ 
-			@Provider(name = ProviderName.HAMWEATHER, property = "error.description"),
-			@Provider(name = ProviderName.FORECASTIO, property = "error"),
-			@Provider(name = ProviderName.OPENWEATHERMAP, property = "message"),
-			@Provider(name = ProviderName.WORLDWEATHERONLINE, property = "data.error.msg"),
-			@Provider(name = ProviderName.WUNDERGROUND, property = "response.error.type"),
-			@Provider(name = ProviderName.YAHOO, property = "error.description") 
-	})
-	private String error;
+    @ForecastMappings({ @Forecast(provider = ProviderName.OPENWEATHERMAP, property = "list"),
+            @Forecast(provider = ProviderName.FORECASTIO, property = "daily.data"),
+            @Forecast(provider = ProviderName.WORLDWEATHERONLINE, property = "data.weather"),
+            @Forecast(provider = ProviderName.HAMWEATHER, property = "response.responses.response.periods"),
+            @Forecast(provider = ProviderName.METEOBLUE, property = "forecast"),
+            @Forecast(provider = ProviderName.APIXU, property = "forecast.forecastday"),
+            @Forecast(provider = ProviderName.WEATHERBIT, property = "forecast") })
+    private List<org.openhab.binding.weather.internal.model.Forecast> forecast = new ArrayList<org.openhab.binding.weather.internal.model.Forecast>();
 
-	@ProviderMappings({ 
-			@Provider(name = ProviderName.OPENWEATHERMAP, property = "cod")
-	})
-	private Integer responseCode;
+    /**
+     * Creates a new Weather object for the specified provider.
+     */
+    public Weather(ProviderName provider) {
+        this.provider = provider;
+    }
 
-	@ForecastMappings({ 
-			@Forecast(provider = ProviderName.OPENWEATHERMAP, property = "list"),
-			@Forecast(provider = ProviderName.WUNDERGROUND, property = "forecast.simpleforecast.forecastday"),
-			@Forecast(provider = ProviderName.FORECASTIO, property = "daily.data"),
-			@Forecast(provider = ProviderName.WORLDWEATHERONLINE, property = "data.weather"),
-			@Forecast(provider = ProviderName.YAHOO, property = "query.results.channel.item.forecast"),
-			@Forecast(provider = ProviderName.HAMWEATHER, property = "response.responses.response.periods") 
-	})
-	private List<org.openhab.binding.weather.internal.model.Forecast> forecast = new ArrayList<org.openhab.binding.weather.internal.model.Forecast>();
+    /**
+     * Returns atmosphere data.
+     */
+    public Atmosphere getAtmosphere() {
+        return atmosphere;
+    }
 
-	/**
-	 * Creates a new Weather object for the specified provider.
-	 */
-	public Weather(ProviderName provider) {
-		this.provider = provider;
-	}
+    /**
+     * Returns clouds data.
+     */
+    public Clouds getClouds() {
+        return clouds;
+    }
 
-	/**
-	 * Returns athmosphere data.
-	 */
-	public Athmosphere getAthmosphere() {
-		return athmosphere;
-	}
+    /**
+     * Returns condition data.
+     */
+    public Condition getCondition() {
+        return condition;
+    }
 
-	/**
-	 * Returns clouds data.
-	 */
-	public Clouds getClouds() {
-		return clouds;
-	}
+    /**
+     * Returns precipitation data.
+     */
+    public Precipitation getPrecipitation() {
+        return precipitation;
+    }
 
-	/**
-	 * Returns condition data.
-	 */
-	public Condition getCondition() {
-		return condition;
-	}
+    /**
+     * Returns temperature data.
+     */
+    public Temperature getTemperature() {
+        return temperature;
+    }
 
-	/**
-	 * Returns precipitation data.
-	 */
-	public Precipitation getPrecipitation() {
-		return precipitation;
-	}
+    /**
+     * Returns wind data.
+     */
+    public Wind getWind() {
+        return wind;
+    }
 
-	/**
-	 * Returns temperature data.
-	 */
-	public Temperature getTemperature() {
-		return temperature;
-	}
+    /**
+     * Returns station data.
+     */
+    public Station getStation() {
+        return station;
+    }
 
-	/**
-	 * Returns wind data.
-	 */
-	public Wind getWind() {
-		return wind;
-	}
+    /**
+     * Returns forecast data.
+     */
+    public List<org.openhab.binding.weather.internal.model.Forecast> getForecast() {
+        return forecast;
+    }
 
-	/**
-	 * Returns forecast data.
-	 */
-	public List<org.openhab.binding.weather.internal.model.Forecast> getForecast() {
-		return forecast;
-	}
+    /**
+     * Returns the provider name.
+     */
+    public ProviderName getProvider() {
+        return provider;
+    }
 
-	/**
-	 * Returns the provider name.
-	 */
-	public ProviderName getProvider() {
-		return provider;
-	}
+    /**
+     * Returns a possible error retrieving weather data.
+     */
+    public String getError() {
+        return error;
+    }
 
-	/**
-	 * Returns a possible error retrieving weather data.
-	 */
-	public String getError() {
-		return error;
-	}
+    /**
+     * Sets a possible error retrieving weather data.
+     */
+    public void setError(String error) {
+        this.error = error;
+    }
 
-	/**
-	 * Sets a possible error retrieving weather data.
-	 */
-	public void setError(String error) {
-		this.error = error;
-	}
+    /**
+     * Returns true, if a error occurred retrieving weather data.
+     */
+    public boolean hasError() {
+        return error != null;
+    }
 
-	/**
-	 * Returns true, if a error occurred retrieving weather data.
-	 */
-	public boolean hasError() {
-		return error != null;
-	}
+    /**
+     * Returns the response code, only used for openweathermap provider.
+     */
+    public Integer getResponseCode() {
+        return responseCode;
+    }
 
-	/**
-	 * Returns the response code, only used for openweathermap provider.
-	 */
-	public Integer getResponseCode() {
-		return responseCode;
-	}
+    /**
+     * Returns true, if the specified property is a virtual property.
+     */
+    public static boolean isVirtualProperty(String property) {
+        return ArrayUtils.contains(VIRTUAL_PROPERTIES, property);
+    }
 
-	/**
-	 * Returns true, if the specified property is a virtual property.
-	 */
-	public static boolean isVirtualProperty(String property) {
-		return ArrayUtils.contains(VIRTUAL_PROPERTIES, property);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        ToStringBuilder tsb = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		ToStringBuilder tsb = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-		if (this instanceof org.openhab.binding.weather.internal.model.Forecast) {
-			tsb.append("day", ((org.openhab.binding.weather.internal.model.Forecast) this).getDay());
-		}
-		tsb.append(temperature).append(athmosphere).append(clouds).append(condition).append(precipitation).append(wind)
-				.append(error);
+        if (this instanceof org.openhab.binding.weather.internal.model.Forecast) {
+            tsb.append("day", ((org.openhab.binding.weather.internal.model.Forecast) this).getDay());
+        }
 
-		return tsb.toString();
-	}
+        tsb.append(temperature).append(atmosphere).append(clouds).append(condition).append(precipitation).append(wind)
+                .append(station).append(error);
+
+        return tsb.toString();
+    }
 }

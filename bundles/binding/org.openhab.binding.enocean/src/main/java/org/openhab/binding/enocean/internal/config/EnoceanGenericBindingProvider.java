@@ -1,16 +1,19 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.enocean.internal.config;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.opencean.core.address.EnoceanId;
 import org.opencean.core.address.EnoceanParameterAddress;
@@ -28,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * This class can parse information from the generic binding format and provides
  * Enocean binding information from it. It registers as a
  * {@link EnoceanBindingProvider} service as well.
- * 
+ *
  * The syntax of the binding configuration strings accepted is the following: <br>
  * <br>
  * enocean="{id="&lt;id_of_enocean_device&gt;" [, EEP = "&lt;EEP_name&gt;
@@ -37,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * is printed on the device package. When the EEP is needed, the eep (e.g.
  * "F6.02.01") is also printed on the device package. All parameters in [] are
  * optional and only used for some devices.
- * 
+ *
  * @author Thomas Letsch (contact@thomas-letsch.de)
  * @since 1.3.0
  */
@@ -63,7 +66,8 @@ public class EnoceanGenericBindingProvider extends AbstractGenericBindingProvide
     }
 
     @Override
-    public void processBindingConfiguration(String context, Item item, String bindingConfig) throws BindingConfigParseException {
+    public void processBindingConfiguration(String context, Item item, String bindingConfig)
+            throws BindingConfigParseException {
         EnoceanBindingConfig config = new EnoceanBindingConfig();
         BindingConfigParser<EnoceanBindingConfig> parser = new BindingConfigParser<EnoceanBindingConfig>();
         parser.parse(bindingConfig, config);
@@ -77,20 +81,10 @@ public class EnoceanGenericBindingProvider extends AbstractGenericBindingProvide
     }
 
     @Override
-    public void removeConfigurations(String context) {
-        Set<Item> configuredItems = contextMap.get(context);
-        if (configuredItems != null) {
-            for (Item item : configuredItems) {
-                items.remove(item.getName());
-            }
-        }
-        super.removeConfigurations(context);
-    }
-
-    @Override
     public EnoceanParameterAddress getParameterAddress(String itemName) {
         EnoceanBindingConfig config = (EnoceanBindingConfig) bindingConfigs.get(itemName);
-        return config != null ? new EnoceanParameterAddress(EnoceanId.fromString(config.id), config.channel, config.parameter) : null;
+        return config != null
+                ? new EnoceanParameterAddress(EnoceanId.fromString(config.id), config.channel, config.parameter) : null;
     }
 
     @Override
@@ -128,7 +122,7 @@ public class EnoceanGenericBindingProvider extends AbstractGenericBindingProvide
      * This is an internal data structure to store information from the binding
      * config strings and use it to answer the requests to the EnOcean binding
      * provider.
-     * 
+     *
      * @author Thomas Letsch (contact@thomas-letsch.de)
      */
     public class EnoceanBindingConfig implements BindingConfig {

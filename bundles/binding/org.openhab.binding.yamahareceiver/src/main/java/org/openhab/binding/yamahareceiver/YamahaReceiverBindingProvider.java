@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.yamahareceiver;
 
@@ -15,33 +19,32 @@ import org.openhab.core.binding.BindingProvider;
 
 /**
  * Yamaha Receiver BindingProvider interface
- * 
+ *
  * @author Eric Thill
  * @since 1.6.0
  */
 public interface YamahaReceiverBindingProvider extends BindingProvider {
 
-	/**
-	 * Returns the Item Configuration identified by {@code itemName}.
-	 * 
-	 * @param itemName
-	 *            the name of the Item.
-	 * @return The Item Configuration identified by {@code itemName}.
-	 * 
-	 */
-	public YamahaReceiverBindingConfig getItemConfig(String itemName);
+    /**
+     * Returns the Item Configuration identified by {@code itemName}.
+     * 
+     * @param itemName
+     *            the name of the Item.
+     * @return The Item Configuration identified by {@code itemName}.
+     * 
+     */
+    public YamahaReceiverBindingConfig getItemConfig(String itemName);
 
-	/**
-	 * Gets all of the configurations registered to a particular device
-	 * identified by {@code deviceUid}
-	 * 
-	 * @param deviceUid
-	 *            the uid of the device
-	 * @param items
-	 *            the map of configurations to populate. key=itemName,
-	 *            value=configuration
-	 */
-	public void getDeviceConfigs(String deviceUid,
-			Map<String, YamahaReceiverBindingConfig> configs);
+    /**
+     * Gets all of the configurations registered to a particular device
+     * identified by {@code deviceUid}
+     * 
+     * @param deviceUid
+     *            the uid of the device
+     * @param items
+     *            the map of configurations to populate. key=itemName,
+     *            value=configuration
+     */
+    public void getDeviceConfigs(String deviceUid, Map<String, YamahaReceiverBindingConfig> configs);
 
 }

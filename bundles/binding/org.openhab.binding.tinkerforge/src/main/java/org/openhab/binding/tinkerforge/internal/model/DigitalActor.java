@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.tinkerforge.internal.model;
 
@@ -14,64 +18,70 @@ import org.openhab.binding.tinkerforge.internal.types.HighLowValue;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Digital Actor</b></em>'.
- * 
+ *
  * @author Theo Weiss
  * @since 1.4.0
- * <!-- end-user-doc -->
+ *        <!-- end-user-doc -->
  *
- * <p>
- * The following features are supported:
- * <ul>
- *   <li>{@link org.openhab.binding.tinkerforge.internal.model.DigitalActor#getDigitalState <em>Digital State</em>}</li>
- * </ul>
- * </p>
+ *        <p>
+ *        The following features are supported:
+ *        </p>
+ *        <ul>
+ *        <li>{@link org.openhab.binding.tinkerforge.internal.model.DigitalActor#getDigitalState <em>Digital
+ *        State</em>}</li>
+ *        </ul>
  *
  * @see org.openhab.binding.tinkerforge.internal.model.ModelPackage#getDigitalActor()
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface DigitalActor extends EObject
-{
-  /**
-   * Returns the value of the '<em><b>Digital State</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Digital State</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Digital State</em>' attribute.
-   * @see #setDigitalState(HighLowValue)
-   * @see org.openhab.binding.tinkerforge.internal.model.ModelPackage#getDigitalActor_DigitalState()
-   * @model unique="false" dataType="org.openhab.binding.tinkerforge.internal.model.DigitalValue"
-   * @generated
-   */
-  HighLowValue getDigitalState();
+public interface DigitalActor extends EObject {
+    /**
+     * Returns the value of the '<em><b>Digital State</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Digital State</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * 
+     * @return the value of the '<em>Digital State</em>' attribute.
+     * @see #setDigitalState(HighLowValue)
+     * @see org.openhab.binding.tinkerforge.internal.model.ModelPackage#getDigitalActor_DigitalState()
+     * @model unique="false" dataType="org.openhab.binding.tinkerforge.internal.model.DigitalValue"
+     * @generated
+     */
+    HighLowValue getDigitalState();
 
-  /**
-   * Sets the value of the '{@link org.openhab.binding.tinkerforge.internal.model.DigitalActor#getDigitalState <em>Digital State</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Digital State</em>' attribute.
-   * @see #getDigitalState()
-   * @generated
-   */
-  void setDigitalState(HighLowValue value);
+    /**
+     * Sets the value of the '{@link org.openhab.binding.tinkerforge.internal.model.DigitalActor#getDigitalState
+     * <em>Digital State</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * 
+     * @param value the new value of the '<em>Digital State</em>' attribute.
+     * @see #getDigitalState()
+     * @generated
+     */
+    void setDigitalState(HighLowValue value);
 
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @model digitalStateDataType="org.openhab.binding.tinkerforge.internal.model.DigitalValue" digitalStateUnique="false"
-   * @generated
-   */
-  void turnDigital(HighLowValue digitalState);
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * 
+     * @model digitalStateDataType="org.openhab.binding.tinkerforge.internal.model.DigitalValue"
+     *        digitalStateUnique="false"
+     * @generated
+     */
+    void turnDigital(HighLowValue digitalState);
 
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @model
-   * @generated
-   */
-  void fetchDigitalValue();
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * 
+     * @model
+     * @generated
+     */
+    void fetchDigitalValue();
 
 } // DigitalActor
